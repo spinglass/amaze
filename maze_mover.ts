@@ -46,8 +46,14 @@ namespace maze {
             this.show(false)
         }
 
-        place(img: Image) {
+        placeOnImage(img: Image) {
             const loc = tiles.getRandomTileByType(img)
+            if (loc) {
+                this.placeOnTile(loc)
+            }
+        }
+
+        placeOnTile(loc: tiles.Location) {
             tiles.placeOnTile(this._sprite, loc)
             this._sprite.vx = 0
             this._sprite.vy = 0

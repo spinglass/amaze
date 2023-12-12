@@ -1,5 +1,5 @@
 //% weight=100 color=#0fbc11 icon="\uf11b" block="Maze"
-//% groups=["Hero", "Chasers", "Game", "Events"]
+//% groups=["Hero", "Chaser", "Game", "Events"]
 namespace maze {
     export enum Direction {
         None = 0,

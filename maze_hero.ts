@@ -37,11 +37,20 @@ namespace maze {
         getMaze()._hero._mover.create(img, SpriteKind.Player)
     }
 
-    //% blockId=maze_hero_place
+    //% blockId=maze_hero_place_on_image
     //% group="Hero"
-    //% block="place hero on tile %img=tileset_tile_picker"
-    export function placeHero(img: Image) {
-        getMaze()._hero._mover.place(img)
+    //% block="place hero on random $img"
+    //% img.shadow=tileset_tile_picker
+    export function placeHeroOnImage(img: Image) {
+        getMaze()._hero._mover.placeOnImage(img)
+    }
+
+    //% blockId=maze_hero_place_on_tile
+    //% group="Hero"
+    //% block="place hero on $loc"
+    //% loc.shadow=mapgettile
+    export function placeHeroOnTile(loc: tiles.Location) {
+        getMaze()._hero._mover.placeOnTile(loc)
     }
 
     //% blockId=maze_hero_camera_follow

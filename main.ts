@@ -41,6 +41,7 @@ function makeLevel () {
         tiles.placeOnTile(pillSprite, value)
         numPills += 1
     }
+    chaserBases = tiles.getTilesByType(assets.tile`tile_chaser`)
     maze.freeze(true)
     maze.sendEvent("unfreeze", 1)
 }
@@ -73,6 +74,31 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Fruit, function (sprite, otherSp
     info.changeScoreBy(fruitScore)
     maze.cancelEvent("fruit_despawn")
 })
+function makeChasers () {
+    chaserDuck = maze.createChaser(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . b 5 5 b . . . 
+        . . . . . . b b b b b b . . . . 
+        . . . . . b b 5 5 5 5 5 b . . . 
+        . b b b b b 5 5 5 5 5 5 5 b . . 
+        . b d 5 b 5 5 5 5 5 5 5 5 b . . 
+        . . b 5 5 b 5 d 1 f 5 d 4 f . . 
+        . . b d 5 5 b 1 f f 5 4 4 c . . 
+        b b d b 5 5 5 d f b 4 4 4 4 b . 
+        b d d c d 5 5 b 5 4 4 4 4 4 4 b 
+        c d d d c c b 5 5 5 5 5 5 5 b . 
+        c b d d d d d 5 5 5 5 5 5 5 b . 
+        . c d d d d d d 5 5 5 5 5 d b . 
+        . . c b d d d d d 5 5 5 b b . . 
+        . . . c c c c c c c c b b . . . 
+        `)
+}
+function placeChaser (id: number, speed: number) {
+    if (chaserBases.length > 0) {
+        maze.placeChaser(0, chaserBases.shift())
+    }
+}
 function cleanup () {
     maze.reset()
     maze.cancelAllEvents()
@@ -85,6 +111,9 @@ function makeFruit (spawn: number, time: number, score: number) {
     fruitSpawn = spawn
     fruitTime = time
     fruitScore = score
+    console.log(fruitSpawn)
+    console.log(fruitTime)
+    console.log(fruitScore)
 }
 function nextLevel () {
     cleanup()
@@ -97,18 +126,21 @@ function nextLevel () {
     } else if (level == 2) {
         tiles.setCurrentTilemap(tilemap`level1`)
         makeLevel()
-        makeFruit(20, 5, 200)
+        makeFruit(20, 5, 500)
         placeHero(80)
+        placeChaser(chaserDuck, 60)
     } else if (level == 3) {
         tiles.setCurrentTilemap(tilemap`level10`)
         makeLevel()
-        makeFruit(20, 5, 200)
+        makeFruit(30, 8, 1000)
         placeHero(80)
+        placeChaser(chaserDuck, 60)
     } else if (level == 4) {
         tiles.setCurrentTilemap(tilemap`level7`)
         makeLevel()
-        makeFruit(20, 5, 200)
+        makeFruit(30, 8, 1500)
         placeHero(80)
+        placeChaser(chaserDuck, 60)
     } else {
     	
     }
@@ -139,18 +171,21 @@ maze.onEvent("next_level", function () {
 })
 function placeHero (speed: number) {
     maze.setHeroSpeed(speed)
-    maze.placeHero(assets.tile`tile_hero`)
+    maze.placeHeroOnImage(assets.tile`tile_hero`)
 }
 let level = 0
 let fruitSpawn = 0
+let chaserDuck = 0
 let fruitScore = 0
 let fruitTime = 0
 let fruitSprite: Sprite = null
+let chaserBases: tiles.Location[] = []
 let pillSprite: Sprite = null
 let numPillsEaten = 0
 let numPills = 0
 let pillScore = 0
 setParameters()
 makeHero()
+makeChasers()
 game.splash("Welcome")
 nextLevel()
