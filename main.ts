@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const Pill = SpriteKind.create()
+    export const Fruit = SpriteKind.create()
 }
 function makeHero (speed: number) {
     maze.createHero(img`
@@ -24,6 +25,7 @@ function makeHero (speed: number) {
     maze.placeHero(assets.tile`tile_hero`)
 }
 function makeLevel () {
+    sprites.destroy(fruitSprite)
     numPills = 0
     numPillsEaten = 0
     for (let value of tiles.getTilesByType(assets.tile`tile_pill`)) {
@@ -32,10 +34,37 @@ function makeLevel () {
         numPills += 1
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Fruit, function (sprite, otherSprite) {
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+    sprites.destroy(fruitSprite)
+    info.changeScoreBy(500)
+})
+function makeFruit () {
+    fruitSprite = sprites.create(img`
+        . . . . . . . 6 . . . . . . . . 
+        . . . . . . 8 6 6 . . . 6 8 . . 
+        . . . e e e 8 8 6 6 . 6 7 8 . . 
+        . . e 2 2 2 2 e 8 6 6 7 6 . . . 
+        . e 2 2 4 4 2 7 7 7 7 7 8 6 . . 
+        . e 2 4 4 2 6 7 7 7 6 7 6 8 8 . 
+        e 2 4 5 2 2 6 7 7 6 2 7 7 6 . . 
+        e 2 4 4 2 2 6 7 6 2 2 6 7 7 6 . 
+        e 2 4 2 2 2 6 6 2 2 2 e 7 7 6 . 
+        e 2 4 2 2 4 2 2 2 4 2 2 e 7 6 . 
+        e 2 4 2 2 2 2 2 2 2 2 2 e c 6 . 
+        e 2 2 2 2 2 2 2 4 e 2 e e c . . 
+        e e 2 e 2 2 4 2 2 e e e c . . . 
+        e e e e 2 e 2 2 e e e c . . . . 
+        e e e 2 e e c e c c c . . . . . 
+        . c c c c c c c . . . . . . . . 
+        `, SpriteKind.Fruit)
+    tiles.placeOnTile(fruitSprite, tiles.getTilesByType(assets.tile`tile_fruit`)[0])
+}
 function nextLevel () {
     level += 1
     if (level == 1) {
         tiles.setCurrentTilemap(tilemap`level1`)
+        fruitSpawn = 20
         makeHero(80)
         makeLevel()
     } else {
@@ -47,14 +76,19 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSpr
     sprites.destroy(otherSprite)
     numPillsEaten += 1
     info.changeScoreBy(10)
+    if (numPillsEaten == fruitSpawn) {
+        makeFruit()
+    }
     if (numPillsEaten == numPills) {
         nextLevel()
     }
 })
+let fruitSpawn = 0
 let level = 0
 let pillSprite: Sprite = null
 let numPillsEaten = 0
 let numPills = 0
+let fruitSprite: Sprite = null
 game.splash("Welcome")
 info.setScore(0)
 nextLevel()
