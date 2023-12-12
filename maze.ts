@@ -1,6 +1,17 @@
 //% weight=100 color=#0fbc11 icon="\uf11b" block="Maze"
 //% groups=["Hero", "Game", "Events"]
 namespace maze {
+    export enum Direction {
+        None = 0,
+        Up = 1 << 0,
+        Right = 1 << 1,
+        Down = 1 << 2,
+        Left = 1 << 3,
+    }
+
+    export function opposite(dir: Direction): Direction {
+        return (dir << 2) % 0xf
+    }
 
     class Maze {
         _hero: Hero
@@ -18,7 +29,7 @@ namespace maze {
         }
 
         freeze(enable: boolean) {
-            this._hero.freeze(enable)
+            this._hero._mover.freeze(enable)
         }
     }
     let _maze: Maze = null
