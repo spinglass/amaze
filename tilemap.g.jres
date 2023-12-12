@@ -117,6 +117,19 @@
         ],
         "displayName": "level9"
     },
+    "level10": {
+        "id": "level10",
+        "mimeType": "application/mkcd-tilemap",
+        "data": "MTAxMTAwMDcwMDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDAxMDEwMTAxMDEwMTAxMDQwMzAxMDEwMTAxMDEwMTA0MDQwMTA0MDQwNDA0MDQwMTA0MDEwNDA0MDQwNDA0MDEwNDA0MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDQwNDAxMDQwNDAxMDQwNDA0MDQwNDA0MDQwMTA0MDQwMTA0MDQwMjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQyMjIyMjIyMjIyMjIyMjIyMjIwMDAwMDAyMDAwMDAwMDIwMDIyMjIyMDIwMjIyMjIwMjIyMDAwMDAwMDAwMDAwMDAyMDAyMjIyMDIyMjIyMjIwMDIyMjAwMDAwMDAwMDAwMDAwMjAyMjIyMjIyMjIyMjIyMjIyMDI=",
+        "tileset": [
+            "myTiles.transparency16",
+            "myTiles.tile2",
+            "myTiles.tile3",
+            "myTiles.tile4",
+            "myTiles.tile1"
+        ],
+        "displayName": "level10"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",

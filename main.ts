@@ -99,6 +99,11 @@ function nextLevel () {
         makeLevel()
         makeFruit(30, 10, 500)
         makeHero(80)
+    } else if (level == 3) {
+        tiles.setCurrentTilemap(tilemap`level10`)
+        makeLevel()
+        makeFruit(30, 10, 500)
+        makeHero(80)
     } else {
         game.gameOver(true)
     }
