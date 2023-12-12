@@ -38,7 +38,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Chaser, function (sprite, otherS
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (true) {
+    if (false) {
         nextLevel()
     }
 })
