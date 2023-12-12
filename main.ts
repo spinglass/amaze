@@ -159,7 +159,7 @@ function nextLevel () {
     maze.sendEvent("restart", 0)
 }
 maze.onEvent("unfreeze", function () {
-    maze.freeze(false)
+    maze.freeze(true)
 })
 maze.onEvent("fruit_despawn", function () {
     sprites.destroy(fruitSprite)
