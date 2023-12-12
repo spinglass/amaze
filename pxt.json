@@ -12,7 +12,9 @@
         "tilemap.g.jres",
         "tilemap.g.ts",
         "maze.ts",
-        "maze_hero.ts"
+        "maze_hero.ts",
+        "images.g.jres",
+        "images.g.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -24,5 +26,5 @@
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "blocksprj"
 }

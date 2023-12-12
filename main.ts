@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const Pill = SpriteKind.create()
+}
 function makeHero (speed: number) {
     maze.createHero(img`
         . f f f . f f f f . f f f . 
@@ -20,15 +23,38 @@ function makeHero (speed: number) {
     maze.setHeroSpeed(speed)
     maze.placeHero(assets.tile`tile_hero`)
 }
+function makeLevel () {
+    numPills = 0
+    numPillsEaten = 0
+    for (let value of tiles.getTilesByType(assets.tile`tile_pill`)) {
+        pillSprite = sprites.create(assets.image`sprite_pill`, SpriteKind.Pill)
+        tiles.placeOnTile(pillSprite, value)
+        numPills += 1
+    }
+}
 function nextLevel () {
     level += 1
     if (level == 1) {
         tiles.setCurrentTilemap(tilemap`level1`)
         makeHero(80)
+        makeLevel()
     } else {
         game.gameOver(true)
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSprite) {
+    music.play(music.createSoundEffect(WaveShape.Sine, 838, 2584, 120, 120, 60, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.InBackground)
+    sprites.destroy(otherSprite)
+    numPillsEaten += 1
+    info.changeScoreBy(10)
+    if (numPillsEaten == numPills) {
+        nextLevel()
+    }
+})
 let level = 0
+let pillSprite: Sprite = null
+let numPillsEaten = 0
+let numPills = 0
 game.splash("Welcome")
+info.setScore(0)
 nextLevel()
