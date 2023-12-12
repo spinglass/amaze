@@ -1,29 +1,32 @@
 namespace maze {
     export class Mover {
         _sprite: Sprite
-        _loc: tiles.Location
         _x: number
         _y: number
         _vx: number
         _vy: number
         _tx: number
         _ty: number
+        _canMove: number
         _direction: Direction
         _request: Direction
         _speed: number
         _freeze: boolean
+        _changedTile: boolean
 
         constructor() {
-            this._x = 0
-            this._y = 0
+            this._x = 0         // world x
+            this._y = 0         // world y
             this._vx = 0
             this._vy = 0
-            this._tx = 0
-            this._ty = 0
+            this._tx = 0        // tilemap x
+            this._ty = 0        // tilemap y
+            this._canMove = 0
             this._direction = Direction.None
             this._request = Direction.None
             this._speed = 50
             this._freeze = false
+            this._changedTile = false
         }
 
         create(img: Image, kind: number) {
@@ -31,13 +34,15 @@ namespace maze {
                 this._sprite.destroy()
             }
             this._sprite = sprites.create(img, kind)
-            this._loc = this._sprite.tilemapLocation()
             this._x = this._sprite.x
             this._y = this._sprite.y
             this._vx = this._sprite.vx
             this._vy = this._sprite.vy
-            this._tx = this._loc.col
-            this._ty = this._loc.row
+
+            const loc = this._sprite.tilemapLocation()
+            this._tx = loc.col
+            this._ty = loc.row
+            this.updateCanMove()
         }
 
         place(img: Image) {
@@ -45,7 +50,6 @@ namespace maze {
             tiles.placeOnTile(this._sprite, loc)
             this._sprite.vx = 0
             this._sprite.vy = 0
-            this._loc = loc
             this._x = this._sprite.x
             this._y = this._sprite.y
             this._vx = 0
@@ -53,6 +57,9 @@ namespace maze {
             this._tx = loc.col
             this._ty = loc.row
             this._direction = Direction.None
+            this._request = Direction.None
+            this._changedTile = false
+            this.updateCanMove()
         }
 
         request(req: Direction) {
@@ -64,30 +71,38 @@ namespace maze {
                 return
             }
 
-            this._loc = this._sprite.tilemapLocation()
-            if (!this._loc) {
+            const loc = this._sprite.tilemapLocation()
+            if (!loc) {
                 return
             }
-            const tx = this._loc.x
-            const ty = this._loc.y
+
+            const tx = loc.col
+            const ty = loc.row
+            this._changedTile = (this._tx != tx) || (this._ty != ty)
+            this._tx = tx
+            this._ty = ty
+            this.updateCanMove()
 
             // Ignore if request is same as current direction
             if (this._request == this._direction) {
                 this._request = Direction.None
             }
 
-            // Check for crossing centre of tile
             const stopped = (this._sprite.vx == 0 && this._sprite.vy == 0)
+
             let crossing = false
+            const cx = loc.x
+            const cy = loc.y
             if (!stopped) {
+                // Check for crossing centre of tile
                 if (this._direction == Direction.Up) {
-                    crossing = (this._y > ty && ty >= this._sprite.y)
+                    crossing = (this._y > cy && cy >= this._sprite.y)
                 } else if (this._direction == Direction.Down) {
-                    crossing = (this._y < ty && ty <= this._sprite.y)
+                    crossing = (this._y < cy && cy <= this._sprite.y)
                 } else if (this._direction == Direction.Left) {
-                    crossing = (this._x > tx && tx >= this._sprite.x)
+                    crossing = (this._x > cx && cx >= this._sprite.x)
                 } else if (this._direction == Direction.Right) {
-                    crossing = (this._x < tx && tx <= this._sprite.x)
+                    crossing = (this._x < cx && cx <= this._sprite.x)
                 }
             }
 
@@ -113,28 +128,28 @@ namespace maze {
                 case Direction.None:
                     this._sprite.vx = 0
                     this._sprite.vy = 0
-                    this._sprite.x = this._loc.x
-                    this._sprite.y = this._loc.y
+                    this._sprite.x = cx
+                    this._sprite.y = cy
                     break
                 case Direction.Up:
                     this._sprite.vx = 0
                     this._sprite.vy = -this._speed
-                    this._sprite.x = this._loc.x
+                    this._sprite.x = cx
                     break
                 case Direction.Down:
                     this._sprite.vx = 0
                     this._sprite.vy = this._speed
-                    this._sprite.x = this._loc.x
+                    this._sprite.x = cx
                     break
                 case Direction.Left:
                     this._sprite.vx = -this._speed
                     this._sprite.vy = 0
-                    this._sprite.y = this._loc.y
+                    this._sprite.y = cy
                     break
                 case Direction.Right:
                     this._sprite.vx = this._speed
                     this._sprite.vy = 0
-                    this._sprite.y = this._loc.y
+                    this._sprite.y = cy
                     break
             }
 
@@ -142,8 +157,6 @@ namespace maze {
             this._y = this._sprite.y
             this._vx = this._sprite.vx
             this._vy = this._sprite.vy
-            this._tx = tx
-            this._ty = ty
         }
 
         freeze(enable: boolean) {
@@ -165,30 +178,23 @@ namespace maze {
             return (this._sprite && !this._freeze)
         }
 
-        private canMove(dir: Direction): boolean {
-            if (dir == Direction.None) {
-                return false
+        public canMove(dir: Direction): boolean {
+            return (this._canMove & dir) != 0
+        }
+        
+        private updateCanMove() {
+            this._canMove = 0
+            this.checkTile(this._tx, this._ty - 1, Direction.Up)
+            this.checkTile(this._tx + 1, this._ty, Direction.Right)
+            this.checkTile(this._tx, this._ty + 1, Direction.Down)
+            this.checkTile(this._tx - 1, this._ty, Direction.Left)
+        }
+
+        private checkTile(tx: number, ty: number, dir: Direction) {
+            const loc = tiles.getTileLocation(tx, ty)
+            if (loc && !loc.isWall()) {
+                this._canMove |= dir
             }
-            let colDir
-            switch (dir) {
-                case Direction.Up:
-                    colDir = CollisionDirection.Top
-                    break
-                case Direction.Down:
-                    colDir = CollisionDirection.Bottom
-                    break
-                case Direction.Left:
-                    colDir = CollisionDirection.Left
-                    break
-                case Direction.Right:
-                    colDir = CollisionDirection.Right
-                    break
-            }
-            const neighbor = this._loc.getNeighboringLocation(colDir)
-            if (neighbor) {
-                return !neighbor.isWall()
-            }
-            return true
         }
     }
 }
