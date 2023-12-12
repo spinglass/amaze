@@ -1,5 +1,5 @@
 //% weight=100 color=#0fbc11 icon="\uf11b" block="Maze"
-//% groups=["Hero", "Events"]
+//% groups=["Hero", "Game", "Events"]
 namespace maze {
 
     class Maze {
@@ -16,6 +16,10 @@ namespace maze {
         update() {
             this._hero.update()
         }
+
+        freeze(enable: boolean) {
+            this._hero.freeze(enable)
+        }
     }
     let _maze: Maze = null
 
@@ -25,5 +29,14 @@ namespace maze {
             _maze.init()
         }
         return _maze
+    }
+
+    //% blockId=maze_freeze
+    //% group="Game"
+    //% block="freeze $enable"
+    //% enable.defl=true
+    //% enable.shadow=toggleOnOff
+    export function freeze(enable: boolean) {
+        getMaze().freeze(enable)
     }
 }

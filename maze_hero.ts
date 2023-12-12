@@ -29,8 +29,11 @@ namespace maze {
         _speed: number
         _x: number
         _y: number
+        _vx: number
+        _vy: number
         _current: Direction
         _request: Direction
+        _freeze: boolean
 
         constructor() {
             this._speed = 50
@@ -63,7 +66,7 @@ namespace maze {
         }
 
         update() {
-            if (!this._sprite) {
+            if (!this._sprite || this._freeze) {
                 return
             }
 
@@ -154,6 +157,23 @@ namespace maze {
 
             this._x = this._sprite.x
             this._y = this._sprite.y
+            this._vx = this._sprite.vx
+            this._vy = this._sprite.vy
+        }
+
+        freeze(enable: boolean) {
+            if (this._sprite) {
+                if (enable) {
+                    this._vx = this._sprite.vx
+                    this._vy = this._sprite.vy
+                    this._sprite.vx = 0
+                    this._sprite.vy =0
+                } else {
+                    this._sprite.vx = this._vx
+                    this._sprite.vy = this._vy
+                }
+            }
+            this._freeze = enable
         }
 
         private canMove(dir: Direction): boolean { 

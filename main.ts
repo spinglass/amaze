@@ -2,6 +2,11 @@ namespace SpriteKind {
     export const Pill = SpriteKind.create()
     export const Fruit = SpriteKind.create()
 }
+function setParameters () {
+    info.setScore(0)
+    fruitScore = 200
+    pillScore = 10
+}
 function makeHero (speed: number) {
     maze.createHero(img`
         . f f f . f f f f . f f f . 
@@ -32,11 +37,13 @@ function makeLevel () {
         tiles.placeOnTile(pillSprite, value)
         numPills += 1
     }
+    maze.freeze(true)
+    maze.sendEvent("unfreeze", 2)
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Fruit, function (sprite, otherSprite) {
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     sprites.destroy(fruitSprite)
-    info.changeScoreBy(500)
+    info.changeScoreBy(fruitScore)
 })
 function cleanup () {
     maze.cancelAllEvents()
@@ -77,6 +84,9 @@ function nextLevel () {
         game.gameOver(true)
     }
 }
+maze.onEvent("unfreeze", function () {
+    maze.freeze(false)
+})
 maze.onEvent("fruit_despawn", function () {
     sprites.destroy(fruitSprite)
 })
@@ -84,13 +94,18 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSpr
     music.play(music.createSoundEffect(WaveShape.Sine, 838, 2584, 120, 120, 60, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.InBackground)
     sprites.destroy(otherSprite)
     numPillsEaten += 1
-    info.changeScoreBy(10)
+    info.changeScoreBy(pillScore)
     if (numPillsEaten == fruitSpawn) {
         makeFruit()
     }
     if (numPillsEaten == numPills) {
-        nextLevel()
+        music.play(music.melodyPlayable(music.jumpUp), music.PlaybackMode.InBackground)
+        maze.freeze(true)
+        maze.sendEvent("next_level", 2)
     }
+})
+maze.onEvent("next_level", function () {
+    nextLevel()
 })
 let fruitSpawn = 0
 let level = 0
@@ -99,6 +114,8 @@ let fruitSprite: Sprite = null
 let pillSprite: Sprite = null
 let numPillsEaten = 0
 let numPills = 0
+let pillScore = 0
+let fruitScore = 0
+setParameters()
 game.splash("Welcome")
-info.setScore(0)
 nextLevel()
