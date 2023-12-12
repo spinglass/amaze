@@ -25,7 +25,6 @@ function makeHero (speed: number) {
     maze.placeHero(assets.tile`tile_hero`)
 }
 function makeLevel () {
-    sprites.destroy(fruitSprite)
     numPills = 0
     numPillsEaten = 0
     for (let value of tiles.getTilesByType(assets.tile`tile_pill`)) {
@@ -39,6 +38,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Fruit, function (sprite, otherSp
     sprites.destroy(fruitSprite)
     info.changeScoreBy(500)
 })
+function cleanup () {
+    maze.cancelAllEvents()
+    sprites.destroy(fruitSprite)
+}
 function makeFruit () {
     fruitSprite = sprites.create(img`
         . . . . . . . 6 . . . . . . . . 
@@ -59,18 +62,24 @@ function makeFruit () {
         . c c c c c c c . . . . . . . . 
         `, SpriteKind.Fruit)
     tiles.placeOnTile(fruitSprite, tiles.getTilesByType(assets.tile`tile_fruit`)[0])
+    maze.sendEvent("fruit_despawn", fruitTime)
 }
 function nextLevel () {
+    cleanup()
     level += 1
     if (level == 1) {
         tiles.setCurrentTilemap(tilemap`level1`)
         fruitSpawn = 20
+        fruitTime = 5
         makeHero(80)
         makeLevel()
     } else {
         game.gameOver(true)
     }
 }
+maze.onEvent("fruit_despawn", function () {
+    sprites.destroy(fruitSprite)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSprite) {
     music.play(music.createSoundEffect(WaveShape.Sine, 838, 2584, 120, 120, 60, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.InBackground)
     sprites.destroy(otherSprite)
@@ -85,10 +94,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSpr
 })
 let fruitSpawn = 0
 let level = 0
+let fruitTime = 0
+let fruitSprite: Sprite = null
 let pillSprite: Sprite = null
 let numPillsEaten = 0
 let numPills = 0
-let fruitSprite: Sprite = null
 game.splash("Welcome")
 info.setScore(0)
 nextLevel()

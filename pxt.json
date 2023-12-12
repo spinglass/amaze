@@ -14,7 +14,8 @@
         "maze.ts",
         "maze_hero.ts",
         "images.g.jres",
-        "images.g.ts"
+        "images.g.ts",
+        "maze_events.ts"
     ],
     "testFiles": [
         "test.ts"

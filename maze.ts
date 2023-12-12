@@ -1,5 +1,5 @@
 //% weight=100 color=#0fbc11 icon="\uf11b" block="Maze"
-//% groups=["Hero"]
+//% groups=["Hero", "Events"]
 namespace maze {
 
     class Maze {
