@@ -5,6 +5,7 @@ namespace SpriteKind {
 }
 function setParameters () {
     info.setScore(0)
+    info.setLife(3)
     pillScore = 10
 }
 function makeHero () {
@@ -28,6 +29,14 @@ function makeHero () {
         `)
     maze.cameraFollowHero()
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Chaser, function (sprite, otherSprite) {
+    if (!(maze.isFrozen())) {
+        maze.freeze(true)
+        music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.InBackground)
+        info.changeLifeBy(-1)
+        maze.sendEvent("restart", 1)
+    }
+})
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (true) {
         nextLevel()
@@ -42,8 +51,6 @@ function makeLevel () {
         numPills += 1
     }
     chaserBases = tiles.getTilesByType(assets.tile`tile_chaser`)
-    maze.freeze(true)
-    maze.sendEvent("unfreeze", 1)
 }
 function spawnFruit () {
     fruitSprite = sprites.create(img`
@@ -115,6 +122,10 @@ function makeFruit (spawn: number, time: number, score: number) {
     console.log(fruitTime)
     console.log(fruitScore)
 }
+maze.onEvent("restart", function () {
+    maze.restart()
+    maze.sendEvent("unfreeze", 1)
+})
 function nextLevel () {
     cleanup()
     level += 1
@@ -142,8 +153,10 @@ function nextLevel () {
         placeHero(80)
         placeChaser(chaserDuck, 60)
     } else {
-    	
+        game.gameOver(true)
     }
+    maze.freeze(true)
+    maze.sendEvent("restart", 0)
 }
 maze.onEvent("unfreeze", function () {
     maze.freeze(false)

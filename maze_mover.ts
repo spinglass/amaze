@@ -11,8 +11,9 @@ namespace maze {
         _direction: Direction
         _request: Direction
         _speed: number
-        _freeze: boolean
+        _frozen: boolean
         _changedTile: boolean
+        _startLocation: tiles.Location
 
         constructor() {
             this._x = 0         // world x
@@ -25,7 +26,7 @@ namespace maze {
             this._direction = Direction.None
             this._request = Direction.None
             this._speed = 50
-            this._freeze = false
+            this._frozen = false
             this._changedTile = false
         }
 
@@ -46,28 +47,33 @@ namespace maze {
             this.show(false)
         }
 
+        restart() {
+            this.placeOnTile(this._startLocation)
+        }
+
         placeOnImage(img: Image) {
             const loc = tiles.getRandomTileByType(img)
-            if (loc) {
-                this.placeOnTile(loc)
-            }
+            this.placeOnTile(loc)
         }
 
         placeOnTile(loc: tiles.Location) {
-            tiles.placeOnTile(this._sprite, loc)
-            this._sprite.vx = 0
-            this._sprite.vy = 0
-            this._x = this._sprite.x
-            this._y = this._sprite.y
-            this._vx = 0
-            this._vy = 0
-            this._tx = loc.col
-            this._ty = loc.row
-            this._direction = Direction.None
-            this._request = Direction.None
-            this._changedTile = false
-            this.updateCanMove()
-            this.show(true)
+            if (loc) {
+                tiles.placeOnTile(this._sprite, loc)
+                this._startLocation = loc
+                this._sprite.vx = 0
+                this._sprite.vy = 0
+                this._x = this._sprite.x
+                this._y = this._sprite.y
+                this._vx = 0
+                this._vy = 0
+                this._tx = loc.col
+                this._ty = loc.row
+                this._direction = Direction.None
+                this._request = Direction.None
+                this._changedTile = false
+                this.updateCanMove()
+                this.show(true)
+            }
         }
 
         show(on: boolean) {
@@ -174,9 +180,9 @@ namespace maze {
             this._vy = this._sprite.vy
         }
 
-        freeze(enable: boolean) {
+        freeze(on: boolean) {
             if (this._sprite) {
-                if (enable) {
+                if (on) {
                     this._vx = this._sprite.vx
                     this._vy = this._sprite.vy
                     this._sprite.vx = 0
@@ -186,11 +192,11 @@ namespace maze {
                     this._sprite.vy = this._vy
                 }
             }
-            this._freeze = enable
+            this._frozen = on
         }
 
         isReady() : boolean {
-            return (this._sprite && !this._freeze)
+            return (this._sprite && !this._frozen)
         }
 
         public canMove(dir: Direction): boolean {
