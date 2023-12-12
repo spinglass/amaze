@@ -28,7 +28,11 @@ function makeHero (speed: number) {
         `)
     maze.setHeroSpeed(speed)
     maze.placeHero(assets.tile`tile_hero`)
+    maze.cameraFollowHero()
 }
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    nextLevel()
+})
 function makeLevel () {
     numPills = 0
     numPillsEaten = 0
@@ -38,16 +42,20 @@ function makeLevel () {
         numPills += 1
     }
     maze.freeze(true)
-    maze.sendEvent("unfreeze", 2)
+    maze.sendEvent("unfreeze", 1)
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Fruit, function (sprite, otherSprite) {
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     sprites.destroy(fruitSprite)
     info.changeScoreBy(fruitScore)
+    maze.cancelEvent("fruit_despawn")
 })
 function cleanup () {
     maze.cancelAllEvents()
     sprites.destroy(fruitSprite)
+    for (let value of sprites.allOfKind(SpriteKind.Pill)) {
+        sprites.destroy(value)
+    }
 }
 function makeFruit () {
     fruitSprite = sprites.create(img`
@@ -70,6 +78,7 @@ function makeFruit () {
         `, SpriteKind.Fruit)
     tiles.placeOnTile(fruitSprite, tiles.getTilesByType(assets.tile`tile_fruit`)[0])
     maze.sendEvent("fruit_despawn", fruitTime)
+    music.play(music.createSoundEffect(WaveShape.Sawtooth, 1, 4045, 255, 255, 250, SoundExpressionEffect.Warble, InterpolationCurve.Curve), music.PlaybackMode.InBackground)
 }
 function nextLevel () {
     cleanup()
@@ -78,8 +87,14 @@ function nextLevel () {
         tiles.setCurrentTilemap(tilemap`level1`)
         fruitSpawn = 20
         fruitTime = 5
-        makeHero(80)
         makeLevel()
+        makeHero(80)
+    } else if (level == 2) {
+        tiles.setCurrentTilemap(tilemap`level7`)
+        fruitSpawn = 30
+        fruitTime = 10
+        makeLevel()
+        makeHero(80)
     } else {
         game.gameOver(true)
     }
@@ -89,6 +104,7 @@ maze.onEvent("unfreeze", function () {
 })
 maze.onEvent("fruit_despawn", function () {
     sprites.destroy(fruitSprite)
+    music.play(music.createSoundEffect(WaveShape.Sawtooth, 3760, 1, 142, 149, 250, SoundExpressionEffect.Warble, InterpolationCurve.Curve), music.PlaybackMode.InBackground)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSprite) {
     music.play(music.createSoundEffect(WaveShape.Sine, 838, 2584, 120, 120, 60, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.InBackground)

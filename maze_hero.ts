@@ -50,12 +50,8 @@ namespace maze {
             this._sprite = sprites.create(img, SpriteKind.Player);
         }
 
-        placeOnImage(img: Image) {
+        place(img: Image) {
             const loc = tiles.getRandomTileByType(img)
-            this.placeOnTile(loc)
-        }
-
-        placeOnTile(loc: tiles.Location) {
             tiles.placeOnTile(this._sprite, loc)
             this._sprite.vx = 0
             this._sprite.vy = 0
@@ -214,7 +210,14 @@ namespace maze {
     //% group="Hero"
     //% block="place hero on tile %img=tileset_tile_picker"
     export function placeHero(img: Image) {
-        getMaze()._hero.placeOnImage(img)
+        getMaze()._hero.place(img)
+    }
+
+    //% blockId=maze_hero_camera_follow
+    //% group="Hero"
+    //% block="camera follow hero"
+    export function cameraFollowHero() {
+        scene.cameraFollowSprite(getMaze()._hero._sprite)
     }
 
     //% blockId=maze_hero_set_speed
