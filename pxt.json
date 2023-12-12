@@ -16,7 +16,8 @@
         "images.g.jres",
         "images.g.ts",
         "maze_events.ts",
-        "maze_mover.ts"
+        "maze_mover.ts",
+        "maze_chaser.ts"
     ],
     "testFiles": [
         "test.ts"

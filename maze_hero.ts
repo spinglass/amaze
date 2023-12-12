@@ -6,6 +6,10 @@ namespace maze {
             this._mover = new Mover()
         }
 
+        reset() {    
+            this._mover.reset()      
+        }
+
         update() {
             if (!this._mover.isReady()) {
                 return

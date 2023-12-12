@@ -30,9 +30,8 @@ namespace maze {
         }
 
         create(img: Image, kind: number) {
-            if (this._sprite) {
-                this._sprite.destroy()
-            }
+            this.reset()
+            
             this._sprite = sprites.create(img, kind)
             this._x = this._sprite.x
             this._y = this._sprite.y
@@ -43,6 +42,13 @@ namespace maze {
             this._tx = loc.col
             this._ty = loc.row
             this.updateCanMove()
+
+            // Hide until placed
+            this.show(false)
+        }
+
+        reset() {
+            this.show(false)
         }
 
         place(img: Image) {
@@ -60,6 +66,14 @@ namespace maze {
             this._request = Direction.None
             this._changedTile = false
             this.updateCanMove()
+            this.show(true)
+        }
+
+        show(on: boolean) {
+            if (this._sprite) {
+                this._sprite.setFlag(SpriteFlag.Ghost, !on)
+                this._sprite.setFlag(SpriteFlag.Invisible, !on)
+            }
         }
 
         request(req: Direction) {

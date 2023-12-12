@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const Pill = SpriteKind.create()
     export const Fruit = SpriteKind.create()
+    export const Chaser = SpriteKind.create()
 }
 function setParameters () {
     info.setScore(0)
@@ -75,6 +76,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Fruit, function (sprite, otherSp
     maze.cancelEvent("fruit_despawn")
 })
 function cleanup () {
+    maze.reset()
     maze.cancelAllEvents()
     sprites.destroy(fruitSprite)
     for (let value2 of sprites.allOfKind(SpriteKind.Pill)) {
@@ -95,17 +97,22 @@ function nextLevel () {
         makeFruit(20, 5, 200)
         makeHero(80)
     } else if (level == 2) {
-        tiles.setCurrentTilemap(tilemap`level7`)
+        tiles.setCurrentTilemap(tilemap`level1`)
         makeLevel()
-        makeFruit(30, 10, 500)
+        makeFruit(20, 5, 200)
         makeHero(80)
     } else if (level == 3) {
         tiles.setCurrentTilemap(tilemap`level10`)
         makeLevel()
-        makeFruit(30, 10, 500)
+        makeFruit(20, 5, 200)
+        makeHero(80)
+    } else if (level == 4) {
+        tiles.setCurrentTilemap(tilemap`level7`)
+        makeLevel()
+        makeFruit(20, 5, 200)
         makeHero(80)
     } else {
-        game.gameOver(true)
+    	
     }
 }
 maze.onEvent("unfreeze", function () {
