@@ -31,7 +31,9 @@ function makeHero (speed: number) {
     maze.cameraFollowHero()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    nextLevel()
+    if (false) {
+        nextLevel()
+    }
 })
 function makeLevel () {
     numPills = 0
