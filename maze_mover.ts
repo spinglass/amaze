@@ -38,11 +38,6 @@ namespace maze {
             this._vx = this._sprite.vx
             this._vy = this._sprite.vy
 
-            const loc = this._sprite.tilemapLocation()
-            this._tx = loc.col
-            this._ty = loc.row
-            this.updateCanMove()
-
             // Hide until placed
             this.show(false)
         }

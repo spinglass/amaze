@@ -7,7 +7,7 @@ function setParameters () {
     info.setScore(0)
     pillScore = 10
 }
-function makeHero (speed: number) {
+function makeHero () {
     maze.createHero(img`
         . f f f . f f f f . f f f . 
         f f f f f c c c c f f f f f 
@@ -26,8 +26,6 @@ function makeHero (speed: number) {
         . . . . f f f f f f . . . . 
         . . . . f f . . f f . . . . 
         `)
-    maze.setHeroSpeed(speed)
-    maze.placeHero(assets.tile`tile_hero`)
     maze.cameraFollowHero()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -95,22 +93,22 @@ function nextLevel () {
         tiles.setCurrentTilemap(tilemap`level1`)
         makeLevel()
         makeFruit(20, 5, 200)
-        makeHero(80)
+        placeHero(80)
     } else if (level == 2) {
         tiles.setCurrentTilemap(tilemap`level1`)
         makeLevel()
         makeFruit(20, 5, 200)
-        makeHero(80)
+        placeHero(80)
     } else if (level == 3) {
         tiles.setCurrentTilemap(tilemap`level10`)
         makeLevel()
         makeFruit(20, 5, 200)
-        makeHero(80)
+        placeHero(80)
     } else if (level == 4) {
         tiles.setCurrentTilemap(tilemap`level7`)
         makeLevel()
         makeFruit(20, 5, 200)
-        makeHero(80)
+        placeHero(80)
     } else {
     	
     }
@@ -139,6 +137,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Pill, function (sprite, otherSpr
 maze.onEvent("next_level", function () {
     nextLevel()
 })
+function placeHero (speed: number) {
+    maze.setHeroSpeed(speed)
+    maze.placeHero(assets.tile`tile_hero`)
+}
 let level = 0
 let fruitSpawn = 0
 let fruitScore = 0
@@ -149,5 +151,6 @@ let numPillsEaten = 0
 let numPills = 0
 let pillScore = 0
 setParameters()
+makeHero()
 game.splash("Welcome")
 nextLevel()
