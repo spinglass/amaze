@@ -11,6 +11,7 @@ namespace maze {
         _direction: Direction
         _request: Direction
         _speed: number
+        _show: boolean
         _frozen: boolean
         _changedTile: boolean
         _startLocation: tiles.Location
@@ -26,6 +27,7 @@ namespace maze {
             this._direction = Direction.None
             this._request = Direction.None
             this._speed = 50
+            this._show = false
             this._frozen = false
             this._changedTile = false
         }
@@ -48,7 +50,9 @@ namespace maze {
         }
 
         restart() {
-            this.placeOnTile(this._startLocation)
+            if (this._show) {
+                this.placeOnTile(this._startLocation)
+            }
         }
 
         placeOnImage(img: Image) {
@@ -77,6 +81,7 @@ namespace maze {
         }
 
         show(on: boolean) {
+            this._show = on
             if (this._sprite) {
                 this._sprite.setFlag(SpriteFlag.Ghost, !on)
                 this._sprite.setFlag(SpriteFlag.Invisible, !on)
@@ -196,7 +201,7 @@ namespace maze {
         }
 
         isReady() : boolean {
-            return (this._sprite && !this._frozen)
+            return (this._sprite && this._show && !this._frozen)
         }
 
         public canMove(dir: Direction): boolean {

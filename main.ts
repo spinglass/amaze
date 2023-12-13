@@ -100,11 +100,31 @@ function makeChasers () {
         . . c b d d d d d 5 5 5 b b . . 
         . . . c c c c c c c c b b . . . 
         `)
-    maze.setChaserKind(chaserDuck, maze.ChaserKind.FollowHero)
+    maze.setChaserKind(chaserDuck, maze.ChaserKind.Random)
+    chaserMonkey = maze.createChaser(img`
+        . . . . f f f f f . . . . . . . 
+        . . . f e e e e e f . . . . . . 
+        . . f d d d d e e e f . . . . . 
+        . c d f d d f d e e f f . . . . 
+        . c d f d d f d e e d d f . . . 
+        c d e e d d d d e e b d c . . . 
+        c d d d d c d d e e b d c . f f 
+        c c c c c d d d e e f c . f e f 
+        . f d d d d d e e f f . . f e f 
+        . . f f f f f e e e e f . f e f 
+        . . . . f e e e e e e e f f e f 
+        . . . f e f f e f e e e e f f . 
+        . . . f e f f e f e e e e f . . 
+        . . . f d b f d b f f e f . . . 
+        . . . f d d c d d b b d f . . . 
+        . . . . f f f f f f f f f . . . 
+        `)
+    maze.setChaserKind(chaserMonkey, maze.ChaserKind.FollowHero)
 }
 function placeChaser (id: number, speed: number) {
     if (chaserBases.length > 0) {
-        maze.placeChaser(0, chaserBases.shift())
+        maze.placeChaser(id, chaserBases.shift())
+        maze.setChaserSpeed(id, speed)
     }
 }
 function cleanup () {
@@ -119,9 +139,6 @@ function makeFruit (spawn: number, time: number, score: number) {
     fruitSpawn = spawn
     fruitTime = time
     fruitScore = score
-    console.log(fruitSpawn)
-    console.log(fruitTime)
-    console.log(fruitScore)
 }
 maze.onEvent("restart", function () {
     maze.restart()
@@ -136,23 +153,31 @@ function nextLevel () {
         makeFruit(20, 5, 200)
         placeHero(80)
     } else if (level == 2) {
+        game.splash("Ducks are random")
         tiles.setCurrentTilemap(tilemap`level1`)
         makeLevel()
         makeFruit(20, 5, 500)
         placeHero(80)
         placeChaser(chaserDuck, 60)
     } else if (level == 3) {
+        game.splash("Monkeys chase you")
+        tiles.setCurrentTilemap(tilemap`level1`)
+        makeLevel()
+        makeFruit(20, 5, 500)
+        placeHero(80)
+        placeChaser(chaserMonkey, 60)
+    } else if (level == 4) {
         tiles.setCurrentTilemap(tilemap`level10`)
         makeLevel()
         makeFruit(30, 8, 1000)
         placeHero(80)
         placeChaser(chaserDuck, 60)
-    } else if (level == 4) {
+    } else if (level == 5) {
         tiles.setCurrentTilemap(tilemap`level7`)
         makeLevel()
         makeFruit(30, 8, 1500)
         placeHero(80)
-        placeChaser(chaserDuck, 60)
+        placeChaser(chaserMonkey, 60)
     } else {
         game.gameOver(true)
     }
@@ -193,6 +218,7 @@ function placeHero (speed: number) {
 }
 let level = 0
 let fruitSpawn = 0
+let chaserMonkey = 0
 let chaserDuck = 0
 let fruitScore = 0
 let fruitTime = 0
@@ -204,7 +230,6 @@ let numPills = 0
 let skipLevel = false
 let immortal = false
 let pillScore = 0
-setCheats()
 setParameters()
 makeHero()
 makeChasers()
