@@ -30,7 +30,7 @@ function makeHero () {
     maze.cameraFollowHero()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Chaser, function (sprite, otherSprite) {
-    if (!(maze.isFrozen())) {
+    if (!(maze.isFrozen()) && !(immortal)) {
         maze.freeze(true)
         music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.InBackground)
         info.changeLifeBy(-1)
@@ -38,7 +38,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Chaser, function (sprite, otherS
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (false) {
+    if (skipLevel) {
         nextLevel()
     }
 })
@@ -100,6 +100,7 @@ function makeChasers () {
         . . c b d d d d d 5 5 5 b b . . 
         . . . c c c c c c c c b b . . . 
         `)
+    maze.setChaserKind(chaserDuck, maze.ChaserKind.FollowHero)
 }
 function placeChaser (id: number, speed: number) {
     if (chaserBases.length > 0) {
@@ -158,6 +159,10 @@ function nextLevel () {
     maze.freeze(true)
     maze.sendEvent("restart", 0)
 }
+function setCheats () {
+    skipLevel = true
+    immortal = true
+}
 maze.onEvent("unfreeze", function () {
     maze.freeze(false)
 })
@@ -196,9 +201,12 @@ let chaserBases: tiles.Location[] = []
 let pillSprite: Sprite = null
 let numPillsEaten = 0
 let numPills = 0
+let skipLevel = false
+let immortal = false
 let pillScore = 0
+setCheats()
 setParameters()
 makeHero()
 makeChasers()
-game.splash("Welcome")
+game.splash("Amaze!")
 nextLevel()

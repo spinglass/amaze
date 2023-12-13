@@ -13,11 +13,19 @@ namespace maze {
         _mover: Mover
         _kind: ChaserKind
         _mode: ChaserMode
+        _homeX: number
+        _homeY: number
+        _targetX: number
+        _targetY: number
 
         constructor() {
             this._mover = new Mover()
             this._kind = ChaserKind.Random
             this._mode = ChaserMode.Chase
+            this._homeX = 0
+            this._homeY = 0
+            this._targetX = 0
+            this._targetY = 0
         }
 
         reset() {
@@ -34,10 +42,12 @@ namespace maze {
             if (stopped || m._changedTile) {
                 // Select the required behaviour
                 if (this._mode = ChaserMode.Scatter) {
-                    this.requestScatter()
+                    this.doScatter()
                 } else if (this._mode = ChaserMode.Chase) {
                     if (this._kind == ChaserKind.Random) {
-                        this.requestRandom()
+                        this.doRandom()
+                    } else if (this._kind == ChaserKind.FollowHero) {
+                        this.doFollow()
                     }
                 }
             }
@@ -45,15 +55,22 @@ namespace maze {
             this._mover.update()
         }
 
+        setHome() {
+            this._homeX = this._mover._tileX
+            this._homeY = this._mover._tileY
+        }
+
         private canMove(dir: Direction): boolean {
             return (this._mover._direction != opposite(dir) && this._mover.canMove(dir))
         }
 
-        private requestScatter() {
-
+        private doScatter() {
+            this._targetX = this._homeX
+            this._targetY = this._homeY
+            this.doTarget()
         }
 
-        private requestRandom() {
+        private doRandom() {
             let dirs: Direction[] = [Direction.Up, Direction.Right, Direction.Down, Direction.Left]
             let options: Direction[] = []
 
@@ -66,6 +83,40 @@ namespace maze {
             if (options.length > 0) {
                 const r = Math.randomRange(0, options.length - 1)
                 this._mover.request(options[r])
+            }
+        }
+
+        private doFollow() {
+            const hero = getMaze()._hero
+            this._targetX = hero._mover._tileX
+            this._targetY = hero._mover._tileY
+            this.doTarget()
+        }
+
+        private doTarget() {
+            // Get distance to target in each axis
+            const dx = (this._targetX - this._mover._tileX)
+            const dy = (this._targetY - this._mover._tileY)
+
+            // Decide prefered direction for each axis
+            const dirX = (dx > 0) ? Direction.Right : Direction.Left
+            const dirY = (dy > 0) ? Direction.Down : Direction.Up
+
+            let dirs: Direction[]
+            if (Math.abs(dx) > Math.abs(dy)) {
+                // Want to right direction in x then y
+                dirs = [dirX, dirY, opposite(dirY), opposite(dirX)]
+            } else {
+                // Want to right direction in y then x
+                dirs = [dirY, dirX, opposite(dirX), opposite(dirY)]
+            }
+
+            // Request the first direction than is allowed
+            for (const dir of dirs) {
+                if (this.canMove(dir)) {
+                    this._mover.request(dir)
+                    break
+                }
             }
         }
     }
@@ -96,6 +147,7 @@ namespace maze {
         const chaser = getChaser(id)
         if (chaser) {
             chaser._mover.placeOnImage(img)
+            chaser.setHome()
         }
     }
 
@@ -108,6 +160,7 @@ namespace maze {
         const chaser = getChaser(id)
         if (chaser) {
             chaser._mover.placeOnTile(loc)
+            chaser.setHome()
         }
     }
 
@@ -119,6 +172,17 @@ namespace maze {
         const chaser = getChaser(id)
         if (chaser) {
             chaser._mover._speed = speed
+        }
+    }
+
+    //% blockId=maze_chaser_set_kind
+    //% group="Chaser"
+    //% block="set chaser $id kind to $kind"
+    //% speed.defl=ChaserKind.Random
+    export function setChaserKind(id: number, kind: ChaserKind) {
+        const chaser = getChaser(id)
+        if (chaser) {
+            chaser._kind = kind
         }
     }
 }

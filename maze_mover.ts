@@ -5,8 +5,8 @@ namespace maze {
         _y: number
         _vx: number
         _vy: number
-        _tx: number
-        _ty: number
+        _tileX: number
+        _tileY: number
         _canMove: number
         _direction: Direction
         _request: Direction
@@ -20,8 +20,8 @@ namespace maze {
             this._y = 0         // world y
             this._vx = 0
             this._vy = 0
-            this._tx = 0        // tilemap x
-            this._ty = 0        // tilemap y
+            this._tileX = 0        // tilemap x
+            this._tileY = 0        // tilemap y
             this._canMove = 0
             this._direction = Direction.None
             this._request = Direction.None
@@ -66,8 +66,8 @@ namespace maze {
                 this._y = this._sprite.y
                 this._vx = 0
                 this._vy = 0
-                this._tx = loc.col
-                this._ty = loc.row
+                this._tileX = loc.col
+                this._tileY = loc.row
                 this._direction = Direction.None
                 this._request = Direction.None
                 this._changedTile = false
@@ -99,9 +99,9 @@ namespace maze {
 
             const tx = loc.col
             const ty = loc.row
-            this._changedTile = (this._tx != tx) || (this._ty != ty)
-            this._tx = tx
-            this._ty = ty
+            this._changedTile = (this._tileX != tx) || (this._tileY != ty)
+            this._tileX = tx
+            this._tileY = ty
             this.updateCanMove()
 
             // Ignore if request is same as current direction
@@ -205,10 +205,10 @@ namespace maze {
         
         private updateCanMove() {
             this._canMove = 0
-            this.checkTile(this._tx, this._ty - 1, Direction.Up)
-            this.checkTile(this._tx + 1, this._ty, Direction.Right)
-            this.checkTile(this._tx, this._ty + 1, Direction.Down)
-            this.checkTile(this._tx - 1, this._ty, Direction.Left)
+            this.checkTile(this._tileX, this._tileY - 1, Direction.Up)
+            this.checkTile(this._tileX + 1, this._tileY, Direction.Right)
+            this.checkTile(this._tileX, this._tileY + 1, Direction.Down)
+            this.checkTile(this._tileX - 1, this._tileY, Direction.Left)
         }
 
         private checkTile(tx: number, ty: number, dir: Direction) {
