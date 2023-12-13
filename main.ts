@@ -178,6 +178,21 @@ function nextLevel () {
         makeFruit(30, 8, 1500)
         placeHero(80)
         placeChaser(chaserMonkey, 60)
+    } else if (level == 6) {
+        game.splash("They can gang-up")
+        tiles.setCurrentTilemap(tilemap`level10`)
+        makeLevel()
+        makeFruit(30, 8, 1000)
+        placeHero(80)
+        placeChaser(chaserDuck, 60)
+        placeChaser(chaserMonkey, 60)
+    } else if (level == 7) {
+        tiles.setCurrentTilemap(tilemap`level7`)
+        makeLevel()
+        makeFruit(30, 8, 1500)
+        placeHero(80)
+        placeChaser(chaserDuck, 60)
+        placeChaser(chaserMonkey, 60)
     } else {
         game.gameOver(true)
     }

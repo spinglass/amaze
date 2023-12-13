@@ -129,20 +129,6 @@
         ],
         "displayName": "level12"
     },
-    "level10": {
-        "id": "level10",
-        "mimeType": "application/mkcd-tilemap",
-        "data": "MTAxMTAwMDcwMDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDAxMDEwMTAxMDEwMTAxMDQwMzAxMDEwMTAxMDEwNTA0MDQwMTA0MDQwNDA0MDQwMTA0MDEwNDA0MDQwNDA0MDEwNDA0MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDQwNDAxMDQwNDAxMDQwNDA0MDQwNDA0MDQwMTA0MDQwMTA0MDQwMjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQyMjIyMjIyMjIyMjIyMjIyMjIwMDAwMDAyMDAwMDAwMDIwMDIyMjIyMDIwMjIyMjIwMjIyMDAwMDAwMDAwMDAwMDAyMDAyMjIyMDIyMjIyMjIwMDIyMjAwMDAwMDAwMDAwMDAwMjAyMjIyMjIyMjIyMjIyMjIyMDI=",
-        "tileset": [
-            "myTiles.transparency16",
-            "myTiles.tile2",
-            "myTiles.tile3",
-            "myTiles.tile4",
-            "myTiles.tile1",
-            "myTiles.tile5"
-        ],
-        "displayName": "level10"
-    },
     "level13": {
         "id": "level13",
         "mimeType": "application/mkcd-tilemap",
@@ -151,20 +137,6 @@
             "myTiles.transparency16"
         ],
         "displayName": "level13"
-    },
-    "level7": {
-        "id": "level7",
-        "mimeType": "application/mkcd-tilemap",
-        "data": "MTAwYTAwMGUwMDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwMTAxMDEwMTAxMDEwMTA1MDQwNDAxMDQwNDAxMDQwNDA0MDEwNDA0MDEwNDA0MDEwMTAxMDQwMTA0MDQwMTA0MDQwMTA0MDEwNDAxMDQwNDAxMDEwMTAxMDQwMTAxMDEwNDA0MDEwNDA0MDQwNDA0MDQwMTA0MDQwMTA0MDQwNDA0MDQwNDAxMDQwNDAxMDEwMTA0MDMwMTAxMDEwNDA0MDEwNDAxMDQwMTA0MDQwMTA0MDQwMTA0MDEwMTAxMDQwNDAxMDQwNDAxMDQwNDA0MDEwNDA0MDEwNDA0MDIwMTAxMDEwMTAxMDEwMTA0MDQwNDA0MDQwNDA0MDQwNDA0MDQyMjIyMjIyMjIyMDIwMDAwMDAyMDAyMjIyMDIyMjAwMjIyMDAyMDIwMDIyMjIwMjAyMDAyMDAyMDAwMjAwMjIyMjIyMjIwMDIyMjIyMjIyMDAyMDAwMjAwMjAwMjAyMDIyMjIwMDIwMjAwMjIyMDAyMjIwMjIyMjAwMjAwMDAwMDIwMjIyMjIyMjIyMg==",
-        "tileset": [
-            "myTiles.transparency16",
-            "myTiles.tile2",
-            "myTiles.tile3",
-            "myTiles.tile4",
-            "myTiles.tile1",
-            "myTiles.tile5"
-        ],
-        "displayName": "level7"
     },
     "level14": {
         "id": "level14",
@@ -318,6 +290,34 @@
             "myTiles.transparency16"
         ],
         "displayName": "level30"
+    },
+    "level10": {
+        "id": "level10",
+        "mimeType": "application/mkcd-tilemap",
+        "data": "MTAxMTAwMDcwMDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDAxMDEwMTAxMDEwMTAxMDQwMzAxMDEwMTAxMDEwNTA0MDQwMTA0MDQwNDA0MDQwMTA0MDEwNDA0MDQwNDA0MDEwNDA0MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDQwNDAxMDQwNDAxMDQwNDA0MDQwNDA0MDQwMTA0MDQwMTA0MDQwMjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDUwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQyMjIyMjIyMjIyMjIyMjIyMjIwMDAwMDAyMDAwMDAwMDIwMDIyMjIyMDIwMjIyMjIwMjIyMDAwMDAwMDAwMDAwMDAyMDAyMjIyMDIyMjIyMjIwMDIyMjAwMDAwMDAwMDAwMDAwMjAyMjIyMjIyMjIyMjIyMjIyMDI=",
+        "tileset": [
+            "myTiles.transparency16",
+            "myTiles.tile2",
+            "myTiles.tile3",
+            "myTiles.tile4",
+            "myTiles.tile1",
+            "myTiles.tile5"
+        ],
+        "displayName": "level10"
+    },
+    "level7": {
+        "id": "level7",
+        "mimeType": "application/mkcd-tilemap",
+        "data": "MTAwYTAwMGUwMDA0MDQwNDA0MDQwNDA0MDQwNDA0MDQwNTAxMDEwMTAxMDEwMTA1MDQwNDAxMDQwNDAxMDQwNDA0MDEwNDA0MDEwNDA0MDEwMTAxMDQwMTA0MDQwMTA0MDQwMTA0MDEwNDAxMDQwNDAxMDEwMTAxMDQwMTAxMDEwNDA0MDEwNDA0MDQwNDA0MDQwMTA0MDQwMTA0MDQwNDA0MDQwNDAxMDQwNDAxMDEwMTA0MDMwMTAxMDEwNDA0MDEwNDAxMDQwMTA0MDQwMTA0MDQwMTA0MDEwMTAxMDQwNDAxMDQwNDAxMDQwNDA0MDEwNDA0MDEwNDA0MDIwMTAxMDEwMTAxMDEwMTA0MDQwNDA0MDQwNDA0MDQwNDA0MDQyMjIyMjIyMjIyMDIwMDAwMDAyMDAyMjIyMDIyMjAwMjIyMDAyMDIwMDIyMjIwMjAyMDAyMDAyMDAwMjAwMjIyMjIyMjIwMDIyMjIyMjIyMDAyMDAwMjAwMjAwMjAyMDIyMjIwMDIwMjAwMjIyMDAyMjIwMjIyMjAwMjAwMDAwMDIwMjIyMjIyMjIyMg==",
+        "tileset": [
+            "myTiles.transparency16",
+            "myTiles.tile2",
+            "myTiles.tile3",
+            "myTiles.tile4",
+            "myTiles.tile1",
+            "myTiles.tile5"
+        ],
+        "displayName": "level7"
     },
     "*": {
         "mimeType": "image/x-mkcd-f4",
