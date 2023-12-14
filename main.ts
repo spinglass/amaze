@@ -48,6 +48,7 @@ function makeLevel () {
     for (let value of tiles.getTilesByType(assets.tile`tile_pill`)) {
         pillSprite = sprites.create(assets.image`sprite_pill`, SpriteKind.Pill)
         tiles.placeOnTile(pillSprite, value)
+        tiles.setTileAt(value, assets.tile`transparency16`)
         numPills += 1
     }
     chaserBases = tiles.getTilesByType(assets.tile`tile_chaser`)
