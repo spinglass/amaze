@@ -43,15 +43,16 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function makeLevel () {
-    numPills = 0
+    locsHero = maze.findAndClearLocations(assets.tile`tile_hero`)
+    locsPill = maze.findAndClearLocations(assets.tile`tile_pill`)
+    locsChaser = maze.findAndClearLocations(assets.tile`tile_chaser`)
+    locsFruit = maze.findAndClearLocations(assets.tile`tile_fruit`)
     numPillsEaten = 0
-    for (let value of tiles.getTilesByType(assets.tile`tile_pill`)) {
+    numPills = locsPill.length
+    for (let value of locsPill) {
         pillSprite = sprites.create(assets.image`sprite_pill`, SpriteKind.Pill)
         tiles.placeOnTile(pillSprite, value)
-        tiles.setTileAt(value, assets.tile`transparency16`)
-        numPills += 1
     }
-    chaserBases = tiles.getTilesByType(assets.tile`tile_chaser`)
 }
 function spawnFruit () {
     fruitSprite = sprites.create(img`
@@ -72,7 +73,7 @@ function spawnFruit () {
         e e e 2 e e c e c c c . . . . . 
         . c c c c c c c . . . . . . . . 
         `, SpriteKind.Fruit)
-    tiles.placeOnTile(fruitSprite, tiles.getTilesByType(assets.tile`tile_fruit`)[0])
+    tiles.placeOnTile(fruitSprite, locsFruit[0])
     maze.sendEvent("fruit_despawn", fruitTime)
     music.play(music.createSoundEffect(WaveShape.Sawtooth, 1, 4045, 255, 255, 250, SoundExpressionEffect.Warble, InterpolationCurve.Curve), music.PlaybackMode.InBackground)
 }
@@ -123,8 +124,8 @@ function makeChasers () {
     maze.setChaserKind(chaserMonkey, maze.ChaserKind.FollowHero)
 }
 function placeChaser (id: number, speed: number) {
-    if (chaserBases.length > 0) {
-        maze.placeChaser(id, chaserBases.shift())
+    if (locsChaser.length > 0) {
+        maze.placeChaser(id, locsChaser.shift())
         maze.setChaserSpeed(id, speed)
     }
 }
@@ -132,8 +133,8 @@ function cleanup () {
     maze.reset()
     maze.cancelAllEvents()
     sprites.destroy(fruitSprite)
-    for (let value2 of sprites.allOfKind(SpriteKind.Pill)) {
-        sprites.destroy(value2)
+    for (let value22 of sprites.allOfKind(SpriteKind.Pill)) {
+        sprites.destroy(value22)
     }
 }
 function makeFruit (spawn: number, time: number, score: number) {
@@ -230,7 +231,7 @@ maze.onEvent("next_level", function () {
 })
 function placeHero (speed: number) {
     maze.setHeroSpeed(speed)
-    maze.placeHeroOnImage(assets.tile`tile_hero`)
+    maze.placeHeroOnTile(locsHero[0])
 }
 let level = 0
 let fruitSpawn = 0
@@ -239,10 +240,13 @@ let chaserDuck = 0
 let fruitScore = 0
 let fruitTime = 0
 let fruitSprite: Sprite = null
-let chaserBases: tiles.Location[] = []
 let pillSprite: Sprite = null
-let numPillsEaten = 0
 let numPills = 0
+let numPillsEaten = 0
+let locsFruit: tiles.Location[] = []
+let locsChaser: tiles.Location[] = []
+let locsPill: tiles.Location[] = []
+let locsHero: tiles.Location[] = []
 let skipLevel = false
 let immortal = false
 let pillScore = 0

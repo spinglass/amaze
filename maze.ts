@@ -88,4 +88,17 @@ namespace maze {
     export function restart() {
         getMaze().restart()
     }
+
+    //% blockId=maze_find_locations
+    //% group="Game"
+    //% block="find and clear locations for $tile"
+    //% tile.shadow=tileset_tile_picker
+    //% blockSetVariable=locationArray
+    export function findAndClearLocations(tile: Image): tiles.Location[] {
+        let locs = tiles.getTilesByType(tile)
+        for (const loc of locs) {
+            tiles.setTileAt(loc, assets.tile`transparency16`)
+        }
+        return locs
+    }
 }
